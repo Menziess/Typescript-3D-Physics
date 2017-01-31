@@ -12,11 +12,7 @@ export default class Layout extends React.Component<Props, State> {
     return (
       <div className="app-container">
         <Nav/>
-        <div className="container">
-          <Head/>
-          <div className="app-content">{this.props.children}</div>
-        </div>
-        <Foot/>
+        <div className="app-content">{this.props.children}</div>
       </div>
     );
   }

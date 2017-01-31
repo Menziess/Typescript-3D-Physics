@@ -7,8 +7,8 @@ interface State { }
 
 const footerStyle = {
   position: 'fixed',
-  width: '100%',
-  bottom: 0
+  width: "100%",
+  bottom: 0,
 }
 
 export default class Foot extends React.Component<Props, State> {

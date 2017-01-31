@@ -9,7 +9,7 @@ export default class Head extends React.Component<Props, State> {
       <header>
         <p>
           Header
-            <img className="logo" width="20%" height="20%" src="./img/Octocat.png" />
+          <img className="logo" width="20%" height="20%" src="./img/Octocat.png" />
         </p>
       </header>
     )

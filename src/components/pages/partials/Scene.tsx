@@ -1,8 +1,8 @@
 import * as React from 'react';
 import * as THREE from 'three';
-import React3 from 'react-three-renderer';
+import * as React3 from 'react-three-renderer';
 
-interface Props {}
+interface Props { }
 interface State {
   cubeRotation: any;
 }
@@ -21,6 +21,7 @@ declare global {
 }
 
 export default class Scene extends React.Component<Props, State> {
+  cameraPosition;
   constructor(props, context) {
     super(props, context);
 
@@ -48,16 +49,19 @@ export default class Scene extends React.Component<Props, State> {
     };
   }
 
+  _onAnimate() {
+
+  }
+
   render() {
     const width = window.innerWidth; // canvas width
-    const height = window.innerHeight; // canvas height
+    const height = window.innerHeight - 70; // canvas height
 
     return (
       <React3
         mainCamera="camera" // this points to the perspectiveCamera which has the name set to "camera" below
         width={width}
         height={height}
-
         onAnimate={this._onAnimate}
       >
         <scene>
@@ -79,7 +83,7 @@ export default class Scene extends React.Component<Props, State> {
               depth={1}
             />
             <meshBasicMaterial
-              color={0x00ff00}
+              color={0x64b5f6}
             />
           </mesh>
         </scene>
