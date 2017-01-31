@@ -5,13 +5,11 @@ import RotatingCube from './objects/RotatingCube';
 
 interface Props {
   width: number;
-  meshes: number;
+  height: number;
 }
 interface State {
   numBodies: number;
   meshStates: any;
-  width: number;
-  height: number;
 }
 declare global {
   namespace JSX {
@@ -27,7 +25,7 @@ declare global {
 }
 
 export default class RotatingCubes extends React.Component<Props, State> {
-  fog; lightPosition; lightTarget; groundQuaternion; cameraPosition; cameraQuaternion; bodies; stats;
+  fog; lightPosition; lightTarget; groundQuaternion; cameraPosition; cameraQuaternion; bodies; meshes;
   constructor(props, context) {
     super(props, context);
 
@@ -69,8 +67,6 @@ export default class RotatingCubes extends React.Component<Props, State> {
     this._updatePhysics();
 
     this._updateGraphics();
-
-    this.stats.update();
   };
 
   _updateGraphics() {
@@ -96,10 +92,6 @@ export default class RotatingCubes extends React.Component<Props, State> {
         .add(movementPerFrame.clone()
           .multiplyScalar(sinTime)));
     }
-  }
-
-  componentWillUnmount() {
-    delete this.stats;
   }
 
   _createBodies() {
@@ -145,36 +137,9 @@ export default class RotatingCubes extends React.Component<Props, State> {
     this._updateGraphics();
   };
 
-  _getInputBox(title) {
-    const { numBodies } = this.state;
-
-    return (<div
-      style={{
-        position: 'absolute',
-        top: 0,
-        color: 'white',
-        width: '100%',
-        textAlign: 'center',
-        background: 'rgba(1,1,1,0.75)',
-      }}
-    >
-      <div>{title}</div>
-      <label>Bodies: <select
-        value={numBodies}
-        onChange={this._onBodiesSelectChange}
-      >
-        {[10, 50, 100, 200, 300, 500, 1000, 1500, 2000, 2500, 3000]
-          .map(val => <option value={val} key={val}>{val}</option>)}
-      </select>
-      </label>
-    </div>);
-  }
-
   render() {
-    const {
-      width,
-      height,
-    } = this.props;
+    const width = window.innerWidth; // canvas width
+    const height = window.innerHeight - 70; // canvas height
 
     const {
       meshStates,
@@ -197,7 +162,6 @@ export default class RotatingCubes extends React.Component<Props, State> {
     return (<div
       ref="container"
     >
-      {this._getInputBox('Rotating Cubes - Through React')}
       <React3
         antialias
         mainCamera="camera"
