@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as THREE from 'three';
+import * as OIMO from 'oimo';
 import * as React3 from 'react-three-renderer';
 import RotatingCube from './models/RotatingCube';
 
@@ -25,16 +26,25 @@ declare global {
 }
 
 export default class RotatingCubes extends React.Component<Props, State> {
-  fog; lightPosition; lightTarget; groundQuaternion; cameraPosition; cameraQuaternion; bodies; meshes;
+  fog; lightPosition; lightTarget; groundQuaternion; cameraPosition; 
+  cameraQuaternion; bodies; meshes; world;
   constructor(props, context) {
     super(props, context);
 
     const N = 20;
-
-    this.fog = new THREE.Fog(0x001525, 10, 40);
-
     const d = 20;
 
+    this.world = new OIMO.World({ 
+      timestep: 1/60, 
+      iterations: 8, 
+      broadphase: 2, // 1 brute force, 2 sweep and prune, 3 volume tree
+      worldscale: 1, // scale full world 
+      random: true,  // randomize sample
+      info: false,   // calculate statistic or not
+      gravity: [0,-9.8,0] 
+    });
+
+    this.fog = new THREE.Fog(0x001525, 10, 40);
     this.lightPosition = new THREE.Vector3(d, d, d);
     this.lightTarget = new THREE.Vector3(0, 0, 0);
     this.groundQuaternion = new THREE.Quaternion()
@@ -43,10 +53,7 @@ export default class RotatingCubes extends React.Component<Props, State> {
     this.cameraQuaternion = new THREE.Quaternion()
       .setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI / 2);
 
-    const bodies = [];
-    bodies.length = N;
-
-    this.bodies = bodies;
+    this.bodies = new Array(N);
 
     this._createBodies();
 
@@ -99,7 +106,7 @@ export default class RotatingCubes extends React.Component<Props, State> {
     const N = bodies.length;
 
     for (let i = 0; i < N; ++i) {
-      bodies[i] = this._createBody(i);
+      bodies[i] = this.world.add(this._createBody(i));
     }
   }
 
