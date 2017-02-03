@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as THREE from 'three';
+import * as OIMO from 'oimo';
 import * as React3 from 'react-three-renderer';
 
 interface Props { }
@@ -20,7 +21,45 @@ declare global {
   }
 }
 
-export default class Scene extends React.Component<Props, State> {
+var world = new OIMO.World({ 
+  timestep: 1/60, 
+  iterations: 8, 
+  broadphase: 2, // 1 brute force, 2 sweep and prune, 3 volume tree
+  worldscale: 1, // scale full world 
+  random: true,  // randomize sample
+  info: false,   // calculate statistic or not
+  gravity: [0,-9.8,0] 
+});
+
+var body = world.add({ 
+  type:'sphere', // type of shape : sphere, box, cylinder 
+  size:[1,1,1], // size of shape
+  pos:[0,0,0], // start position in degree
+  rot:[0,0,90], // start rotation in degree
+  move:true, // dynamic or statique
+  density: 1,
+  friction: 0.2,
+  restitution: 0.2,
+  belongsTo: 1, // The bits of the collision groups to which the shape belongs.
+  collidesWith: 0xffffffff; // The bits of the collision groups with which the shape collides.
+});
+
+var body = world.add({ 
+  type:'jointHinge', // type of joint : jointDistance, jointHinge, jointPrisme, jointSlide, jointWheel
+  body1: "b1", // name or id of attach rigidbody
+  body2: "b1", // name or id of attach rigidbody
+});
+
+
+// update world
+world.step();
+
+// and copy position and rotation to three mesh
+myMesh.position.copy( body.getPosition() );
+myMesh.quaternion.copy( body.getQuaternion() );
+
+export default class Oimo extends React.Component<Props, State> {
+
   cameraPosition;
   constructor(props, context) {
     super(props, context);

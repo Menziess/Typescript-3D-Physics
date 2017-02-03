@@ -26,6 +26,7 @@
     "ejs": "^2.3.33",
     "express": "^4.0.35",
     "express-rewrite": "0.0.4",
+    "oimo": "^1.0.5",
     "react": "^15.0.2",
     "react-dom": "^15.4.2",
     "react-materialize": "^0.18.1",

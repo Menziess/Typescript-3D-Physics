@@ -1,11 +1,11 @@
 import * as React from 'react';
 import * as THREE from 'three';
 import * as React3 from 'react-three-renderer';
-import RotatingCube from './objects/RotatingCube';
+import RotatingCube from './models/RotatingCube';
 
 interface Props {
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
 }
 interface State {
   numBodies: number;
@@ -29,7 +29,7 @@ export default class RotatingCubes extends React.Component<Props, State> {
   constructor(props, context) {
     super(props, context);
 
-    const N = 200;
+    const N = 20;
 
     this.fog = new THREE.Fog(0x001525, 10, 40);
 
