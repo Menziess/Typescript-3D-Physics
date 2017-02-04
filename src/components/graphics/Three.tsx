@@ -1,9 +1,9 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import * as React3 from 'react-three-renderer';
 import * as THREE from 'three';
-import {OrbitControls} from 'three';
 import * as OIMO from 'oimo';
+
+const OrbitControls = require( 'three-orbit-controls' )( THREE );
 
 interface Props {
 }
@@ -130,6 +130,7 @@ export default class Three extends React.Component<Props, State> {
 
     // Render scene
     const canvas = ReactDOM.findDOMNode(this.refs['canvas']);
+    const controls = new OrbitControls( this.camera, canvas);    
     this.renderer = new THREE.WebGLRenderer({ canvas: canvas, precision: "mediump" });
     this.renderer.setClearColor( this.bgColor, 1 );
     this.renderer.shadowMap.enabled = true;
@@ -168,7 +169,6 @@ export default class Three extends React.Component<Props, State> {
   }
 
   moveCamera() {
-    const controls = new THREE.OrbitControls( this.camera );
     // this.camera.position.copy( Orbit(this.center, this.camPos.horizontal, this.camPos.vertical, this.camPos.distance));
     // this.camera.lookAt(this.center);
   }
