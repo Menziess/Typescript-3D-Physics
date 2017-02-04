@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as React3 from 'react-three-renderer';
 import * as THREE from 'three';
+import {OrbitControls} from 'three';
 import * as OIMO from 'oimo';
 
 interface Props {
@@ -167,8 +168,9 @@ export default class Three extends React.Component<Props, State> {
   }
 
   moveCamera() {
+    const controls = new THREE.OrbitControls( this.camera );
     // this.camera.position.copy( Orbit(this.center, this.camPos.horizontal, this.camPos.vertical, this.camPos.distance));
-    this.camera.lookAt(this.center);
+    // this.camera.lookAt(this.center);
   }
 
   onMouseDown(e) {
