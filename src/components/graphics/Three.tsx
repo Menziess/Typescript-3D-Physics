@@ -3,6 +3,8 @@ import * as ReactDOM from 'react-dom';
 import * as THREE from 'three';
 import * as OIMO from 'oimo';
 
+import Box from './models/Box';
+
 const OrbitControls = require( 'three-orbit-controls' )( THREE );
 
 interface Props {
