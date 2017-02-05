@@ -23,7 +23,6 @@
   "license": "ISC",
   "private": true,
   "dependencies": {
-    "babylonjs": "^2.5.0",
     "ejs": "^2.3.33",
     "express": "^4.0.35",
     "express-rewrite": "0.0.4",
@@ -37,8 +36,6 @@
     "three-orbit-controls": "^82.1.0"
   },
   "devDependencies": {
-    "@types/babylonjs": "^2.3.31",
-    "@types/lodash": "^4.14.52",
     "@types/node": "^7.0.4",
     "@types/react": "^15.0.4",
     "@types/three": "^0.83.1",
