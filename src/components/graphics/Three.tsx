@@ -16,13 +16,10 @@ export default class Three extends React.Component<Props, State> {
   world: any;
   scene: any;
   camera: any;
-  center: any;
   renderer: any;
-  mounted: boolean;
+  mounted: boolean; 
   bodies: any;
   bgColor = 0x252627;
-  camPos = { horizontal: 90, vertical: 75, distance: 200, automove: false };
-  mouse = { ox:0, oy:0, h:0, v:0, mx:0, my:0, down:false, over:false, moving:true };
 
   constructor() {
     super();
@@ -48,9 +45,7 @@ export default class Three extends React.Component<Props, State> {
     this.scene = new THREE.Scene();
     this.scene.add( new THREE.AmbientLight( this.bgColor ) );
     this.camera = new THREE.PerspectiveCamera(60, this.state.width / this.state.height, 1, 3000);
-    this.center = new THREE.Vector3(0,50,0);
     this.camera.position.z = 6;
-    this.moveCamera();
 
     // Instantiate bodies array
     this.bodies = new Array();
@@ -90,9 +85,9 @@ export default class Three extends React.Component<Props, State> {
    * Main render loop
    */
   private loop = () => {
-    requestAnimationFrame(this.loop);
     this.animate();
     this.renderer.render(this.scene, this.camera);
+    requestAnimationFrame(this.loop);
   }
 
   /*
@@ -148,61 +143,12 @@ export default class Three extends React.Component<Props, State> {
       position: "fixed",
     }
 
-    function onMouseDown(e) {
-      self.onMouseDown(e);
-    }
-    function onMouseUp(e) {
-      self.onMouseUp(e);
-    }
-    function onMouseWheel(e) {
-      self.onMouseWheel(e);
-    }
-
     return (
       <div>
         <canvas id="canvas" ref="canvas"
           width={this.state.width} height={this.state.height}
-          style={canvasStyle} onMouseDown={onMouseDown} 
-          onMouseUp={onMouseUp} />
+          style={canvasStyle} />
       </div>
     )
-  }
-
-  moveCamera() {
-    // this.camera.position.copy( Orbit(this.center, this.camPos.horizontal, this.camPos.vertical, this.camPos.distance));
-    // this.camera.lookAt(this.center);
-  }
-
-  onMouseDown(e) {
-    e.preventDefault();
-    this.mouse.ox = e.clientX;
-    this.mouse.oy = e.clientY;
-    this.mouse.h = this.camPos.horizontal;
-    this.mouse.v = this.camPos.vertical;
-    this.mouse.down = true;
-  }
-
-  onMouseUp(e) {
-    this.mouse.down = false;
-    document.body.style.cursor = 'auto';
-  }
-
-  onMouseMove(e) {
-    e.preventDefault();
-    if (this.mouse.down ) {
-        document.body.style.cursor = 'move';
-        this.camPos.horizontal = ((e.clientX - this.mouse.ox) * 0.3) + this.mouse.h;
-        this.camPos.vertical = (-(e.clientY - this.mouse.oy) * 0.3) + this.mouse.v;
-        this.moveCamera();
-    }
-  }
-
-  onMouseWheel(e) {
-    var delta = 0;
-    if(e.wheelDeltaY){delta=e.wheelDeltaY*0.01;}
-    else if(e.wheelDelta){delta=e.wheelDelta*0.05;}
-    else if(e.detail){delta=-e.detail*1.0;}
-    this.camPos.distance-=(delta*10);
-    this.moveCamera();   
   }
 }
