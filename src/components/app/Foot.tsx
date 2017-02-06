@@ -23,7 +23,7 @@ export default class Foot extends React.Component<Props, State> {
             <li><Link to="/" className="grey-text text-lighten-3">Link 1</Link></li>
           </ul>
         }
-        className='example blue lighten-2'
+        className='example light-blue darken-4'
       >
         <h5 className="white-text">Footer Content</h5>
         <p className="grey-text text-lighten-4">You can use rows and columns here to organize your footer content.</p>

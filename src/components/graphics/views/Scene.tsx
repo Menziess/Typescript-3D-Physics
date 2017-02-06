@@ -19,12 +19,10 @@ export default class Scene extends React.Component<Props, State> {
     super();
 
     this.mounted = false;
-
     this.state = {
       width: window.innerWidth,
       height: window.innerHeight,
     }
-
     this.sceneController = new SceneController(this.state.width, this.state.height);
   }
 
@@ -34,7 +32,6 @@ export default class Scene extends React.Component<Props, State> {
     window.addEventListener("resize", this.updateDimensions.bind(this));
 
     const canvas = ReactDOM.findDOMNode(this.refs['canvas']);
-    // const controls = new OrbitControls( this.camera, canvas);    
     this.sceneController.mount(canvas);
     this.updateDimensions();
     this.loop();
@@ -49,7 +46,10 @@ export default class Scene extends React.Component<Props, State> {
   // Main render loop
   private loop = () => {
     this.sceneController.renderFrame();
-    requestAnimationFrame(this.loop);
+    const self = this;
+    setTimeout(function() {
+      requestAnimationFrame(self.loop);
+    }, 1000 / 30);
   }
 
   // When width or height changes
