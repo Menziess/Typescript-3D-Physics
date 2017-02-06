@@ -1,10 +1,10 @@
-declare function require(name:string);
+declare function require(name: string);
 
 import * as path from 'path';
 import * as express from 'express';
 import * as React from 'react';
-import { renderToString } from 'react-dom/server';
 import { match, RouterContext } from 'react-router';
+import { renderToString } from 'react-dom/server';
 import NotFoundPage from './components/pages/NotFoundPage';
 import Routes from './components/app/Routes';
 
@@ -20,14 +20,14 @@ app.use(express.static(path.join(__dirname, '../public')));
 // universal routing and rendering
 app.get('*', (req, res) => {
   match(
-    { Routes, location: req.url },
+    { location: req.url },
     (err, redirectLocation, renderProps) => {
 
       // in case of error display the error message
       if (err) {
         return res.status(500).send(
           console.log(err),
-          {"err": err.message}
+          { "err": err.message }
         );
       }
 
@@ -40,10 +40,10 @@ app.get('*', (req, res) => {
       let markup;
       if (renderProps) {
         // if the current route matched we have renderProps
-        markup = renderToString(<RouterContext {...renderProps}/>);
+        markup = renderToString(<RouterContext {...renderProps} />);
       } else {
         // otherwise we can render a 404 page
-        markup = renderToString(<NotFoundPage/>);
+        markup = renderToString(<NotFoundPage />);
         res.status(404);
       }
 

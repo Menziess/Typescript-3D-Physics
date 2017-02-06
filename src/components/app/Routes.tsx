@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Router, Route, IndexRoute, browserHistory, withExampleBasename } from 'react-router';
+import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import Layout from './Layout';
 import Scene from '../pages/Scene';
 import Dashboard from '../pages/Dashboard';
