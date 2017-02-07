@@ -11,8 +11,8 @@ interface State {
 }
 
 export default class Scene extends React.Component<Props, State> {
-  sceneController: SceneController;
-  mounted: boolean;
+  private sceneController: SceneController;
+  private mounted: boolean;
 
   // Initializes attributes
   constructor() {

@@ -5,7 +5,6 @@ import BodyController from './BodyController';
 const OrbitControls = require('three-orbit-controls')(THREE);
 
 export default class SceneController {
-
   private bgColor: number;
   private scene: THREE.Scene;
   private camera: THREE.PerspectiveCamera;
