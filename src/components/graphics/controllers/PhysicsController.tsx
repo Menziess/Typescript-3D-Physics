@@ -69,8 +69,10 @@ export default class PhysicsController {
   }
 
   // Animate bodies with physics
-  public animate() {
-    this.world.step();
+  public animate(progress: number) {
+    for (let i = 0; i < progress; i++) {
+      this.world.step();
+    }
     this.bodies.forEach((element, index) => {
       element.position.copy(this.physics[index].getPosition());
       element.quaternion.copy(this.physics[index].getQuaternion());

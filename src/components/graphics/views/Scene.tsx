@@ -15,16 +15,33 @@ export default class Scene extends React.Component<Props, State> {
   private renderController: RenderController;
   private physicsController: PhysicsController;
   private mounted: boolean;
+  private lastRender: number;
 
   constructor() {
     super();
     this.mounted = false;
+    this.lastRender = Date.now();
     this.state = {
       width: window.innerWidth,
       height: window.innerHeight,
     }
     this.renderController = RenderController.getInstance();
     this.physicsController = PhysicsController.getInstance();
+  }
+
+  private step = (progress: number) => {
+    this.renderController.renderFrame(this.physicsController.getScene());
+    this.physicsController.animate(progress);
+  }
+
+  private start = () => {
+    let self = this;
+    let progress = (Date.now() - this.lastRender) / 10;
+    this.step(progress);
+    this.lastRender = Date.now();
+    setTimeout(() => {
+      requestAnimationFrame(self.start);
+    }, 1000 / 200);
   }
 
   private componentDidMount() {
@@ -45,15 +62,6 @@ export default class Scene extends React.Component<Props, State> {
   private initObjects() {
     this.physicsController.initGround();
     this.physicsController.initBodies();
-  }
-
-  private step = () => {
-    this.renderController.renderFrame(this.physicsController.getScene());
-    this.physicsController.animate();
-  }
-
-  private start() {
-    setInterval(this.step, 1000 / 60);
   }
 
   private updateDimensions() {
