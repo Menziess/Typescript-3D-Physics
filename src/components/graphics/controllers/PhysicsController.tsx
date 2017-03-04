@@ -3,13 +3,13 @@ import * as OIMO from 'oimo';
 
 import Box from '../models/Box';
 
-export default class BodyController {
+export default class PhysicsController {
 
+  private static instance: PhysicsController = new PhysicsController();
   private world: OIMO.World;
   private scene: THREE.Scene;
   private bodies: THREE.Mesh[];
   private physics: OIMO.Body[];
-  public ToRad: number;
 
   // material
   matSphere = new THREE.MeshBasicMaterial({ name: 'sph', transparent: true, opacity: 0.6, reflectivity: 120});
@@ -24,7 +24,7 @@ export default class BodyController {
   matGround = new THREE.MeshBasicMaterial({ color: 0x3D4143, transparent: true, opacity: 0.5, reflectivity: 10 });
 
   // Initializes attributes
-  constructor(scene: THREE.Scene) {
+  private constructor() {
     this.world = new OIMO.World({
       timestep: 1 / 60,
       iterations: 8,
@@ -35,11 +35,38 @@ export default class BodyController {
       gravity: [0, -9.8, 0]
     });
 
-    this.scene = scene;
+    this.scene = new THREE.Scene();
+    this.initScene();
+
     this.bodies = [];
     this.physics = [];
-    this.ToRad = 0.0174532925199432957;
   };
+
+  public static getInstance() {
+    return this.instance;
+  }
+
+  public getScene() {
+    return this.scene;
+  }
+
+  private initScene() {
+    this.scene.add(new THREE.AmbientLight(0x252627));
+
+    let light = new THREE.DirectionalLight(0xffff00, 1);
+    light.position.set(2, 2, 2);
+    light.target.position.set(0, 0, 0);
+    light.castShadow = true;
+    let d = 500;
+    light.shadow.camera = new THREE.OrthographicCamera(-d, d, d, -d, 500, 1600);
+    light.shadow.bias = 0.0001;
+    light.shadow.mapSize.width = light.shadow.mapSize.height = 1024;
+    this.scene.add(light);
+    this.scene.fog = new THREE.FogExp2(0x000000, 0.0128);
+
+    let grid = new THREE.GridHelper(200, 10);
+    this.scene.add(grid);
+  }
 
   // Animate bodies with physics
   public animate() {
@@ -52,13 +79,16 @@ export default class BodyController {
 
   // Create some bodies
   public initBodies() {
-    let cube = new Box(undefined, this.matHead);
-    let cube1 = new Box(undefined, this.matBox);
-    let cube2 = new Box(undefined, this.matBox3);
-    let cube3 = new Box(undefined, this.matBoxSleep2);
-    let cube4 = new Box(undefined, this.matSphere);
-    let cube5 = new Box(undefined, this.matHead);
-    this.addBodies([cube, cube1, cube2, cube3, cube4, cube5]);
+    let cube = new Box(undefined, this.matHead, 'body1');
+    let cube1 = new Box(undefined, this.matBox, 'body2');
+    // let cube2 = new Box(undefined, this.matBox3);
+    // let cube3 = new Box(undefined, this.matBoxSleep2);
+    // let cube4 = new Box(undefined, this.matSphere);
+    // let cube5 = new Box(undefined, this.matHead);
+    this.world.add({type:"joint", body1:'body1', body2:'body2', pos1:[0,1,0], pos2:[0,-1,0], min:2, max:20, collision:true, spring:true });
+    this.addBodies([cube, cube1
+    // , cube2, cube3, cube4, cube5
+    ]);
   }
 
   public initGround() {

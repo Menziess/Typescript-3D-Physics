@@ -1,7 +1,8 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
-import SceneController from '../controllers/SceneController';
+import RenderController from '../controllers/RenderController';
+import PhysicsController from '../controllers/PhysicsController';
 
 interface Props {
 }
@@ -11,57 +12,58 @@ interface State {
 }
 
 export default class Scene extends React.Component<Props, State> {
-  private sceneController: SceneController;
+  private renderController: RenderController;
+  private physicsController: PhysicsController;
   private mounted: boolean;
 
-  // Initializes attributes
   constructor() {
     super();
-
     this.mounted = false;
     this.state = {
       width: window.innerWidth,
       height: window.innerHeight,
     }
-    this.sceneController = new SceneController(this.state.width, this.state.height);
+    this.renderController = RenderController.getInstance();
+    this.physicsController = PhysicsController.getInstance();
   }
 
-  // When React component is mounted
   private componentDidMount() {
     this.mounted = true;
     window.addEventListener("resize", this.updateDimensions.bind(this));
-
     const canvas = ReactDOM.findDOMNode(this.refs['canvas']);
-    this.sceneController.mount(canvas);
+    this.renderController.mount(canvas);
     this.updateDimensions();
-    this.loop();
+    this.initObjects();
+    this.start();
   }
 
-  // When React component is unmounted
   private componentWillUnmount() {
     window.removeEventListener("resize", this.updateDimensions.bind(this));
     this.mounted = false;
   }
 
-  // Main render loop
-  private loop = () => {
-    this.sceneController.renderFrame();
-    const self = this;
-    setTimeout(function() {
-      requestAnimationFrame(self.loop);
-    }, 1000 / 30);
+  private initObjects() {
+    this.physicsController.initGround();
+    this.physicsController.initBodies();
   }
 
-  // When width or height changes
+  private step = () => {
+    this.renderController.renderFrame(this.physicsController.getScene());
+    this.physicsController.animate();
+  }
+
+  private start() {
+    setInterval(this.step, 1000 / 60);
+  }
+
   private updateDimensions() {
     this.mounted && this.setState({
       width: window.innerWidth,
       height: window.innerHeight,
     });
-    this.sceneController.updateDimensions(this.state.width, this.state.height);
+    this.renderController.updateDimensions(this.state.width, this.state.height);
   }
 
-  // React render function
   render() {
     const self = this;
     const canvasStyle = {
