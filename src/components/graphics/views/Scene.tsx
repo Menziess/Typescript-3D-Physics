@@ -41,7 +41,7 @@ export default class Scene extends React.Component<Props, State> {
     this.lastRender = Date.now();
     setTimeout(() => {
       requestAnimationFrame(self.start);
-    }, 1000 / 200);
+    }, 1000 / 60);
   }
 
   private componentDidMount() {
