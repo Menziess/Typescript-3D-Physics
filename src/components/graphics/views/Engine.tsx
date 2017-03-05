@@ -1,8 +1,8 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
-import RenderController from '../controllers/RenderController';
-import PhysicsController from '../controllers/PhysicsController';
+import Renderer from '../controllers/Renderer';
+import Physics from '../controllers/Physics';
 
 interface Props {
 }
@@ -11,9 +11,9 @@ interface State {
   height: number;
 }
 
-export default class Scene extends React.Component<Props, State> {
-  private renderController: RenderController;
-  private physicsController: PhysicsController;
+export default class Engine extends React.Component<Props, State> {
+  private renderer: Renderer;
+  private physics: Physics;
   private mounted: boolean;
   private lastRender: number;
 
@@ -25,13 +25,13 @@ export default class Scene extends React.Component<Props, State> {
       width: window.innerWidth,
       height: window.innerHeight,
     }
-    this.renderController = RenderController.getInstance();
-    this.physicsController = PhysicsController.getInstance();
+    this.renderer = Renderer.getInstance();
+    this.physics = Physics.getInstance();
   }
 
   private step = (progress: number) => {
-    this.renderController.renderFrame(this.physicsController.getScene());
-    this.physicsController.animate(progress);
+    this.renderer.renderFrame(this.physics.getScene());
+    this.physics.animate(progress);
   }
 
   private start = () => {
@@ -48,7 +48,7 @@ export default class Scene extends React.Component<Props, State> {
     this.mounted = true;
     window.addEventListener("resize", this.updateDimensions.bind(this));
     const canvas = ReactDOM.findDOMNode(this.refs['canvas']);
-    this.renderController.mount(canvas);
+    this.renderer.mount(canvas);
     this.updateDimensions();
     this.initObjects();
     this.start();
@@ -60,8 +60,8 @@ export default class Scene extends React.Component<Props, State> {
   }
 
   private initObjects() {
-    this.physicsController.initGround();
-    this.physicsController.initBodies();
+    this.physics.initGround();
+    this.physics.initBodies();
   }
 
   private updateDimensions() {
@@ -69,7 +69,7 @@ export default class Scene extends React.Component<Props, State> {
       width: window.innerWidth,
       height: window.innerHeight,
     });
-    this.renderController.updateDimensions(this.state.width, this.state.height);
+    this.renderer.updateDimensions(this.state.width, this.state.height);
   }
 
   render() {

@@ -1,7 +1,5 @@
 import * as THREE from 'three';
 
-import PhysicsController from './PhysicsController';
-
 const OrbitControls = require('three-orbit-controls')(THREE);
 
 export default class RenderController {
@@ -11,10 +9,13 @@ export default class RenderController {
   private renderer: THREE.WebGLRenderer;
 
   private constructor(width?: number, height?: number) {
+    let fov = 80;
+    let near = 0.1;
+    let far = 10000;
     width = (width) ? width : 800;
     height = (height) ? height : 600;
     this.fps = 60;
-    this.camera = new THREE.PerspectiveCamera(90, width / height, 1, 10000);
+    this.camera = new THREE.PerspectiveCamera(fov, width / height, near, far);
     this.camera.position.set(0.2, 15, 30);
   };
 
