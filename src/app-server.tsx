@@ -20,7 +20,7 @@ app.use(express.static(path.join(__dirname, '../public')));
 // universal routing and rendering
 app.get('*', (req, res) => {
   match(
-    { location: req.url },
+    req.url,
     (err, redirectLocation, renderProps) => {
 
       // in case of error display the error message
