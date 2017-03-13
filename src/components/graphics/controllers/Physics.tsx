@@ -12,16 +12,16 @@ export default class Physics {
   private physics: OIMO.Body[];
 
   // material
-  matSphere = new THREE.MeshBasicMaterial({ name: 'sph', transparent: true, opacity: 0.6, reflectivity: 120 });
-  matHead = new THREE.MeshBasicMaterial({ color: 0xe8b36d, name: 'sphHH', reflectivity: 60 });
-  matBox = new THREE.MeshBasicMaterial({ name: 'box', reflectivity: 100 });
-  matBox2 = new THREE.MeshBasicMaterial({ name: 'box2', reflectivity: 100 });
-  matBox3 = new THREE.MeshBasicMaterial({ name: 'box3', reflectivity: 100 });
-  matSphereSleep = new THREE.MeshBasicMaterial({ name: 'ssph', transparent: true, opacity: 0.8 });
-  matBoxSleep = new THREE.MeshBasicMaterial({ name: 'sbox' });
-  matBoxSleep2 = new THREE.MeshBasicMaterial({ name: 'sbox2' });
-  matBoxSleep3 = new THREE.MeshBasicMaterial({ name: 'sbox3' });
-  matGround = new THREE.MeshBasicMaterial({ color: 0x3D4143, transparent: true, opacity: 0.5, reflectivity: 10 });
+  matSphere = new THREE.MeshLambertMaterial({ name: 'sph', transparent: true, opacity: 0.6, reflectivity: 120 });
+  matHead = new THREE.MeshLambertMaterial({ color: 0xe8b36d, name: 'sphHH', reflectivity: 60 });
+  matBox = new THREE.MeshLambertMaterial({ name: 'box', reflectivity: 100 });
+  matBox2 = new THREE.MeshLambertMaterial({ name: 'box2', reflectivity: 100 });
+  matBox3 = new THREE.MeshLambertMaterial({ name: 'box3', reflectivity: 100 });
+  matSphereSleep = new THREE.MeshLambertMaterial({ name: 'ssph', transparent: true, opacity: 0.8 });
+  matBoxSleep = new THREE.MeshLambertMaterial({ name: 'sbox' });
+  matBoxSleep2 = new THREE.MeshLambertMaterial({ name: 'sbox2' });
+  matBoxSleep3 = new THREE.MeshLambertMaterial({ name: 'sbox3' });
+  matGround = new THREE.MeshLambertMaterial({ color: 0x3D4143, transparent: true, opacity: 0.5, reflectivity: 10 });
 
   private constructor() {
     this.world = new OIMO.World({
@@ -50,7 +50,7 @@ export default class Physics {
 
   public animate(progress: number) {
     for (let i = 0; i < progress; i++) {
-      this.world.step();
+      this.world.step();  
     }
     this.bodies.forEach((element, index) => {
       element.position.copy(this.physics[index].getPosition());
