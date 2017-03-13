@@ -22,7 +22,6 @@ export default class PhysicsController {
   matBoxSleep3 = new THREE.MeshBasicMaterial({ name: 'sbox3' });
   matGround = new THREE.MeshBasicMaterial({ color: 0x3D4143, transparent: true, opacity: 0.5, reflectivity: 10 });
 
-  // Initializes attributes
   private constructor() {
     this.world = new OIMO.World({
       timestep: 1 / 60,
@@ -34,11 +33,11 @@ export default class PhysicsController {
       gravity: [0, -9.8, 0]
     });
 
-    this.scene = new THREE.Scene();
-    this.initScene();
-
     this.bodies = [];
     this.physics = [];
+    
+    this.scene = new THREE.Scene();
+    this.initScene();
   };
 
   public static getInstance() {
@@ -63,9 +62,11 @@ export default class PhysicsController {
     this.scene.fog = new THREE.FogExp2(0x000000, 0.0128);
     let grid = new THREE.GridHelper(200, 10);
     this.scene.add(grid);
+
+    this.initGround();
+    this.initBodies();
   }
 
-  // Animate bodies with physics
   public animate(progress: number) {
     for (let i = 0; i < progress; i++) {
       this.world.step();
@@ -76,7 +77,6 @@ export default class PhysicsController {
     });
   }
 
-  // Create some bodies
   public initBodies() {
     let cube = new Box(undefined, this.matHead, 'body1');
     let cube1 = new Box(undefined, this.matBox);
@@ -96,7 +96,6 @@ export default class PhysicsController {
     let ground2 = this.world.add({ size: [400, 80, 400], pos: [0, -40, 0], world: this.world });
   }
 
-  // Add array of bodies to controller
   private addBodies(bodies: THREE.Mesh[]) {
     bodies.forEach(body => {
       this.bodies.push(body);

@@ -50,18 +50,12 @@ export default class Engine extends React.Component<Props, State> {
     const canvas = ReactDOM.findDOMNode(this.refs['canvas']);
     this.renderer.mount(canvas);
     this.updateDimensions();
-    this.initObjects();
     this.start();
   }
 
   private componentWillUnmount() {
     window.removeEventListener("resize", this.updateDimensions.bind(this));
     this.mounted = false;
-  }
-
-  private initObjects() {
-    this.physics.initGround();
-    this.physics.initBodies();
   }
 
   private updateDimensions() {
