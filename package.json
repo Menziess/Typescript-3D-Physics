@@ -32,7 +32,8 @@
     "react-router": "^2.0.46",
     "socket.io": "^1.7.2",
     "three": "^0.84.0",
-    "three-orbit-controls": "^82.1.0"
+    "three-orbit-controls": "^82.1.0",
+    "three-pointer-controls": "^0.6.0"
   },
   "devDependencies": {
     "@types/node": "^7.0.4",

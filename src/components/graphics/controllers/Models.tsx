@@ -31,14 +31,17 @@ export default class Models {
   private initGeometry() {
     let material = new THREE.MeshLambertMaterial({ color: 0xffeeff });
 
-    let boxGeometry = new THREE.BoxBufferGeometry(100, 100, 100)
+    let boxGeometry = new THREE.BoxBufferGeometry(20, 20, 30)
     let mesh = new THREE.Mesh(boxGeometry, material);
     mesh.position.z = -100;
     this.meshes.push(mesh);
 
-    let torusGeometry = new THREE.TorusBufferGeometry(100, 30, 16, 100);
-    let mesh2 = new THREE.Mesh(torusGeometry, material);
-    this.meshes.push(mesh2);
+    // let torusGeometry = new THREE.TorusBufferGeometry(100, 30, 16, 100);
+    // let mesh2 = new THREE.Mesh(torusGeometry, material);
+    // this.meshes.push(mesh2);
+
+    // let gridGeometry = new THREE.PlaneBufferGeometry(1, 1, 256, 256);
+    // let mesh3 = new THREE.Mesh(gridGeometry, material);
   }
 
   private addMeshesToScene() {

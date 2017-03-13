@@ -28,13 +28,14 @@ export default class Renderer {
   }
 
   private step = (progress: number) => {
-    this.renderFrame();
+    Renderer.engine.getCamera().animate(progress);
     Renderer.engine.getModels().animate(progress);
     Renderer.engine.getPhysics().animate(progress);
   }
 
   private physicsLoop = () => {
     let self = this;
+    this.renderFrame();    
     let progress = (Date.now() - this.lastRender) / 10;
     this.step(progress);
     this.lastRender = Date.now();

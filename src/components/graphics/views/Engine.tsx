@@ -24,12 +24,12 @@ export default class Engine extends React.Component<Props, State> {
 
   private static CANVAS_ID = "canvas";
   private mounted: boolean;
-  private withPhysicsEnabled: boolean;
+  private physicsEnabled: boolean;
 
   private constructor() {
     super();
     this.mounted = false;
-    this.withPhysicsEnabled = true;
+    this.physicsEnabled = true;
     this.state = {
       width: window.innerWidth,
       height: window.innerHeight,
@@ -49,14 +49,14 @@ export default class Engine extends React.Component<Props, State> {
 
   private init() {
     Engine.renderer.init();
-    // Engine.physics.init();
+    Engine.physics.init();
     Engine.models.init();
     Engine.camera.init();
     Engine.scene.init();
   }
 
   private start() {
-    Engine.renderer.startRender(this.withPhysicsEnabled);
+    Engine.renderer.startRender(this.physicsEnabled);
   }
 
   private componentDidMount() {
