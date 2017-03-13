@@ -3,6 +3,8 @@ import * as ReactDOM from 'react-dom';
 
 import Renderer from '../controllers/Renderer';
 import Physics from '../controllers/Physics';
+import Camera from '../controllers/Camera';
+import Scene from '../controllers/Scene';
 
 interface Props {
 }
@@ -12,12 +14,15 @@ interface State {
 }
 
 export default class Engine extends React.Component<Props, State> {
-  private renderer: Renderer;
-  private physics: Physics;
+  private static renderer: Renderer;
+  private static physics: Physics;
+  private static camera: Camera;
+  private static scene: Scene;
+
   private mounted: boolean;
   private lastRender: number;
 
-  constructor() {
+  private constructor() {
     super();
     this.mounted = false;
     this.lastRender = Date.now();
@@ -25,13 +30,27 @@ export default class Engine extends React.Component<Props, State> {
       width: window.innerWidth,
       height: window.innerHeight,
     }
-    this.renderer = Renderer.getInstance();
-    this.physics = Physics.getInstance();
+    Engine.renderer = Renderer.getInstance(this);
+    Engine.physics = Physics.getInstance(this);
+    Engine.camera = Camera.getInstance(this);
+    Engine.scene = Scene.getInstance(this);
+  }
+
+  public getRenderer() { return Engine.renderer; }
+  public getPhysics() { return Engine.physics; }
+  public getCamera() { return Engine.camera; }
+  public getScene() { return Engine.scene; }
+
+  private init() {
+    Engine.renderer.init();
+    Engine.physics.init();
+    Engine.camera.init();
+    Engine.scene.init();
   }
 
   private step = (progress: number) => {
-    this.renderer.renderFrame(this.physics.getScene());
-    this.physics.animate(progress);
+    Engine.renderer.renderFrame(Engine.scene);
+    Engine.physics.animate(progress);
   }
 
   private start = () => {
@@ -48,8 +67,9 @@ export default class Engine extends React.Component<Props, State> {
     this.mounted = true;
     window.addEventListener("resize", this.updateDimensions.bind(this));
     const canvas = ReactDOM.findDOMNode(this.refs['canvas']);
-    this.renderer.mount(canvas);
+    Engine.renderer.mount(canvas);
     this.updateDimensions();
+    this.init();
     this.start();
   }
 
@@ -63,7 +83,7 @@ export default class Engine extends React.Component<Props, State> {
       width: window.innerWidth,
       height: window.innerHeight,
     });
-    this.renderer.updateDimensions(this.state.width, this.state.height);
+    Engine.renderer.updateDimensions(this.state.width, this.state.height);
   }
 
   render() {

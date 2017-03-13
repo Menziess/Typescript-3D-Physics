@@ -1,12 +1,13 @@
 import * as THREE from 'three';
 import * as OIMO from 'oimo';
+import Engine from '../views/Engine';
 
 import Box from '../models/Box';
 
-export default class PhysicsController {
-  private static instance: PhysicsController = new PhysicsController();
+export default class Physics {
+  private static instance: Physics = new Physics();
+  private static engine: Engine;
   private world: OIMO.World;
-  private scene: THREE.Scene;
   private bodies: THREE.Mesh[];
   private physics: OIMO.Body[];
 
@@ -35,36 +36,16 @@ export default class PhysicsController {
 
     this.bodies = [];
     this.physics = [];
-    
-    this.scene = new THREE.Scene();
-    this.initScene();
   };
 
-  public static getInstance() {
+  public static getInstance(engine: Engine) {
+    Physics.engine = engine;
     return this.instance;
   }
 
-  public getScene() {
-    return this.scene;
-  }
-
-  private initScene() {
-    this.scene.add(new THREE.AmbientLight(0x252627));
-    let light = new THREE.DirectionalLight(0xffff00, 1);
-    light.position.set(2, 2, 2);
-    light.target.position.set(0, 0, 0);
-    light.castShadow = true;
-    let d = 500;
-    light.shadow.camera = new THREE.OrthographicCamera(-d, d, d, -d, 500, 1600);
-    light.shadow.bias = 0.0001;
-    light.shadow.mapSize.width = light.shadow.mapSize.height = 1024;
-    this.scene.add(light);
-    this.scene.fog = new THREE.FogExp2(0x000000, 0.0128);
-    let grid = new THREE.GridHelper(200, 10);
-    this.scene.add(grid);
-
-    this.initGround();
+  public init() {
     this.initBodies();
+    this.initGround();
   }
 
   public animate(progress: number) {
@@ -99,7 +80,7 @@ export default class PhysicsController {
   private addBodies(bodies: THREE.Mesh[]) {
     bodies.forEach(body => {
       this.bodies.push(body);
-      this.scene.add(body);
+      Physics.engine.getScene().add(body);
     });
     bodies.forEach((body, index) => {
       this.physics[index] = this.world.add({

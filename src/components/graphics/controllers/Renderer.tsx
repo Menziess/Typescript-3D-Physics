@@ -1,9 +1,12 @@
 import * as THREE from 'three';
+import Engine from '../views/Engine';
+
 
 const OrbitControls = require('three-orbit-controls')(THREE);
 
-export default class RenderController {
-  private static instance: RenderController = new RenderController();
+export default class Renderer {
+  private static instance: Renderer = new Renderer();
+  private static engine: Engine;
   private fps: number;
   private camera: THREE.PerspectiveCamera;
   private renderer: THREE.WebGLRenderer;
@@ -19,8 +22,13 @@ export default class RenderController {
     this.camera.position.set(0.2, 15, 30);
   };
 
-  public static getInstance() {
+  public static getInstance(engine: Engine) {
+    Renderer.engine = engine;
     return this.instance;
+  }
+
+  public init() {
+    //
   }
 
   public updateDimensions(width: number, height: number) {
